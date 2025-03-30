@@ -124,6 +124,29 @@ body {
 	}
 }
 
+// Author meta-data
+
+.author {
+	display: flex;
+	align-items: center;
+}
+
+.author-image {
+	width: 2.5em;
+	height: 2.5em;
+	border-radius: 50%;
+	margin-right: 0.5em;
+}
+
+.username span {
+	display: block;
+}
+
+.username span:nth-of-type(2) {
+	font-size: 0.7em;
+	color: rgb(68, 68, 68);
+}
+
 // Post Card
 
 .post-card {
@@ -181,27 +204,6 @@ body {
 		align-items: center;
 	}
 
-	.author {
-		display: flex;
-		align-items: center;
-	}
-
-	.author-image {
-		width: 2.5em;
-		height: 2.5em;
-		border-radius: 50%;
-		margin-right: 0.5em;
-	}
-
-	.username span {
-		display: block;
-	}
-
-	.username span:nth-of-type(2) {
-		font-size: 0.7em;
-		color: rgb(68, 68, 68);
-	}
-
 	.stats span {
 		margin-left: 1em;
 	}
@@ -215,21 +217,22 @@ body {
 	}
 }
 
-.post {
+.post-container{
 	width: 70%;
 	margin-left: 5em;
+	h3{
+		margin-bottom: 1em
+	}
+}
 
+.post {
 	.author {
-		display: flex;
-		align-items: center;
 		margin-top: 1em;
 	}
 
 	.author-image {
 		width: 3.5em;
 		height: 3.5em;
-		border-radius: 50%;
-		margin-right: 0.5em;
 	}
 
 	.username span {
@@ -260,5 +263,12 @@ body {
 		border-radius: 5px;
 		margin-right: 0.5em;
 		font-size: 1em;
+	}
+}
+
+.comment{
+	margin-bottom: 3em;
+	.author{
+		margin-bottom: 1em;
 	}
 }

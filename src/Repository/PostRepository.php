@@ -19,16 +19,17 @@ class PostRepository extends ServiceEntityRepository
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
-       public function findAllWithJoin(): array
-       {
-           return $this->createQueryBuilder('p')
-               ->addSelect('a')
-               ->leftJoin('p.author', 'a')
-               ->orderBy('p.createdAt', 'DESC')
-               ->getQuery()
-               ->getResult()
-           ;
-       }
+    public function findAllWithJoin(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->addSelect('a', 'c')
+            ->innerJoin('p.author', 'a')
+            ->leftJoin('p.comments', 'c')
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     //    public function findOneBySomeField($value): ?Post
     //    {

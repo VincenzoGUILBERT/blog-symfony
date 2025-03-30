@@ -6,24 +6,61 @@
 
 {% block main %}
 
-	<article class="post">
-		<header>
-			<h1>{{ post.title }}</h1>
-			<div class="author">
-				<img class="author-image" src="https://placehold.co/400" alt="">
-				<div class="username">
-					<span>{{post.author.username}}</span>
-					<span>Le
-						{{post.createdAt | date("m/d/Y")}}</span>
+	<div class="post-container">
+		<article class="post">
+			<header>
+				<h1>{{ post.title }}</h1>
+				<div class="author">
+					<img class="author-image" src="https://placehold.co/400" alt="">
+					<div class="username">
+						<span>{{post.author.username}}</span>
+						<span>
+							Le
+							{{post.createdAt | date("m/d/Y")}}
+						</span>
+					</div>
 				</div>
+			</header>
+			<img src="https://placehold.co/800x600" class="img">
+			<p class="content">{{ post.content }}</p>
+			<div class="tags">
+				<span>tag</span>
+				<span>tag</span>
 			</div>
-		</header>
-		<img src="https://placehold.co/800x600" class="img">
-		<p class="content">{{ post.content }}</p>
-		<div class="tags">
-			<span>tag</span>
-			<span>tag</span>
-		</div>
-	</article>
+		</article>
+
+		<hr class="mt-5 mb-5"/>
+
+		{% if is_granted('IS_AUTHENTICATED') %}
+			{{ render(controller('App\\Controller\\CommentController::commentForm', {post})) }}
+		{% endif %}
+
+		<h3>{{ post.comments | length }}
+			Comments</h3>
+		{% for comment in post.comments %}
+			<div class="comment">
+				<div class="d-flex justify-content-between">
+					<div class="author">
+						<img class="author-image" src="https://placehold.co/400" alt="">
+						<div class="username">
+							<span>
+								{{comment.author.username}}
+							</span>
+							<span>
+								Le
+								{{comment.createdAt | date("m/d/Y")}}
+							</span>
+						</div>
+					</div>
+					{% if app.user.id == comment.author.id %}
+						{{ include('comment/_delete_form.html.twig') }}
+					{% endif %}
+				</div>
+				<p class="content">
+					{{ comment.content }}
+				</p>
+			</div>
+		{% endfor %}
+	</div>
 
 {% endblock %}
