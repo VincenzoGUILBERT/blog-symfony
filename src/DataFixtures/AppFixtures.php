@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Post;
 use App\Entity\User;
 use Faker\Factory;
 use Doctrine\Persistence\ObjectManager;
@@ -17,7 +18,7 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for ($i=0; $i < 50; $i++) { 
+        for ($i=0; $i < 10; $i++) { 
             $user = new User();
             $hashedPassword = $this->hasher->hashPassword($user, 'password');
             $user->setUsername($faker->userName())
@@ -27,6 +28,17 @@ class AppFixtures extends Fixture
             ;
 
             $manager->persist($user);
+
+            for ($j=0; $j < mt_rand(3,10); $j++) { 
+                $post = new Post();
+                $post->setTitle($faker->sentence())
+                     ->setContent($faker->paragraph(10, true))
+                     ->setAuthor($user)
+                     ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')))
+                ;
+
+                $manager->persist($post);
+            }
         }
 
         $manager->flush();
