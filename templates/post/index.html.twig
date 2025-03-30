@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Post
+{% endblock %}
+
+{% block main %}
+	{% for post in posts %}
+		<article class="post-card">
+			<img class="image" src="https://placehold.co/800x600" alt="">
+			<div class="content">
+				<header class="header">
+					<div class="title">
+						<h1>{{post.title | u.truncate(100, '...')}}</h1>
+						<i class="like fa-solid fa-heart"></i>
+					</div>
+					<div class="tags">
+						<span>tag</span>
+						<span>tag</span>
+					</div>
+				</header>
+				<footer class="footer">
+					<div class="author">
+						<img class="author-image" src="https://placehold.co/400" alt="">
+						<div class="username">
+							<span>{{post.author.username}}</span>
+							<span>Le
+								{{post.createdAt | date("m/d/Y")}}</span>
+						</div>
+					</div>
+					<div class="stats">
+						<span>12 Comments</span>
+						<span>1 Likes</span>
+					</div>
+				</footer>
+			</div>
+			<a href="{{ path('app_post_show', {'id': post.id}) }}"></a>
+			</hr>
+		</article>
+	{% endfor %}
+{% endblock %}
