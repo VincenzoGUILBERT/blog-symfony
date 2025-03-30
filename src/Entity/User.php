@@ -21,12 +21,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\NotBlank('Email can not be blank')]
+    #[Assert\NotBlank(message:'Email can not be blank')]
     #[Assert\Email(message: 'Invalid email')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Assert\NotBlank('Username can not be blank')]
+    #[Assert\NotBlank(message:'Username can not be blank')]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotBlank('Password can not be blank')]
+    #[Assert\NotBlank(message:'Password can not be blank')]
     #[Assert\length(min: 8, minMessage: 'Your password must be at least 8 characters long')]
     private ?string $password = null;
 
