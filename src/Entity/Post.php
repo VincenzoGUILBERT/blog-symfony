@@ -50,9 +50,16 @@ class Post
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true)]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, PostLike>
+     */
+    #[ORM\OneToMany(targetEntity: PostLike::class, mappedBy: 'post', orphanRemoval: true)]
+    private Collection $likes;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,5 +143,23 @@ class Post
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, PostLike>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function isLikedByUser(User $user): bool
+    {
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+        return false;
     }
 }

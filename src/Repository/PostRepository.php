@@ -22,9 +22,10 @@ class PostRepository extends ServiceEntityRepository
     public function findAllWithJoin(): array
     {
         return $this->createQueryBuilder('p')
-            ->addSelect('a', 'c')
+            ->addSelect('a', 'c', 'l')
             ->innerJoin('p.author', 'a')
             ->leftJoin('p.comments', 'c')
+            ->leftJoin('p.likes', 'l')
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
             ->getResult()

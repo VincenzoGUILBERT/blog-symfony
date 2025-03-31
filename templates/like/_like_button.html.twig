@@ -1,0 +1,7 @@
+<span class="like-button" data-type="{{ type }}" data-id="{{ entity.id }}">
+    {% if entity.isLikedByUser(app.user) %}
+        <i class="like fa-solid fa-heart"></i>
+    {% else %}
+        <i class="like fa-regular fa-heart"></i>
+    {% endif %}
+</span>

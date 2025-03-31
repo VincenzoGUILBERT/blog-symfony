@@ -52,9 +52,13 @@
 							</span>
 						</div>
 					</div>
-					{% if app.user.id == comment.author.id %}
-						{{ include('comment/_delete_form.html.twig') }}
-					{% endif %}
+					<div class="d-flex align-items-center">
+						{% if app.user.id == comment.author.id %}
+							{{ include('comment/_delete_form.html.twig') }}
+						{% endif %}
+						{{ include('like/_like_button.html.twig', {type: 'comment', entity: comment}) }}
+					</div>
+					
 				</div>
 				<p class="content">
 					{{ comment.content }}

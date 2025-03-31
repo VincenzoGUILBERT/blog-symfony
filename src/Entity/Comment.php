@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
@@ -35,6 +37,17 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Post $post = null;
+
+    /**
+     * @var Collection<int, CommentLike>
+     */
+    #[ORM\OneToMany(targetEntity: CommentLike::class, mappedBy: 'comment', orphanRemoval: true)]
+    private Collection $likes;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,5 +100,23 @@ class Comment
         $this->post = $post;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentLike>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function isLikedByUser(User $user): bool
+    {
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+        return false;
     }
 }
