@@ -3,11 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Post;
-use App\Form\EventSubscriber\SetAuthorAndDateSubscriber;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Form\Type\TagsInputType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Form\EventSubscriber\SetAuthorAndDateSubscriber;
 
 class PostType extends AbstractType
 {
@@ -18,6 +19,13 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
+            ->add('tags', TagsInputType::class, [
+                'label' => 'Tags',
+                'required' => false,
+                'attr' => [
+                    'data-role' => 'tagsinput',
+                    ]
+            ])
             ->addEventSubscriber(new SetAuthorAndDateSubscriber($this->security))
         ;
     }
