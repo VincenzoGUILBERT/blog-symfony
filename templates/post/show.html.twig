@@ -35,6 +35,7 @@
 		<h3>{{ post.comments | length }}
 			Comments</h3>
 		{% for comment in post.comments %}
+			{% set totalLikes = comment.likes | length %}
 			<div class="comment">
 				<div class="d-flex justify-content-between">
 					<div class="author">

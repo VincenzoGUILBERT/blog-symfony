@@ -1,38 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Post
+	Post
 {% endblock %}
 
 {% block main %}
-	{% for post in posts %}
-
-		<article class="post-card">
-			<img class="image" src="https://placehold.co/800x600" alt="">
-			<div class="content">
-				<header class="header">
-					<div class="title">
-						<h1>{{post.title | u.truncate(100, '...')}}</h1>
-						{{ include('like/_like_button.html.twig', {type: 'post', entity: post}) }}
+{% for data in datas %}
+	{% set post = data[0] %}
+	{% set totalLikes = data['totalLikes'] %}
+	<article class="post-card">
+		<img class="image" src="https://placehold.co/800x600" alt="">
+		<div class="content">
+			<header class="header">
+				<div class="title">
+					<h1>{{post.title | u.truncate(100, '...')}}</h1>
+					{{ include('like/_like_button.html.twig', {type: 'post', entity: post}) }}
+				</div>
+				{{ include('post/_post_tags.html.twig') }}
+			</header>
+			<footer class="footer">
+				<div class="author">
+					<img class="author-image" src="https://placehold.co/400" alt="">
+					<div class="username">
+						<span>{{post.author.username}}</span>
+						<span>Le
+							{{post.createdAt | date("m/d/Y")}}</span>
 					</div>
-					{{ include('post/_post_tags.html.twig') }}
-				</header>
-				<footer class="footer">
-					<div class="author">
-						<img class="author-image" src="https://placehold.co/400" alt="">
-						<div class="username">
-							<span>{{post.author.username}}</span>
-							<span>Le
-								{{post.createdAt | date("m/d/Y")}}</span>
-						</div>
-					</div>
-					<div class="stats">
-						<span>{{ post.comments | length }} Comments</span>
-					</div>
-				</footer>
-			</div>
-			<a href="{{ path('app_post_show', {'id': post.id}) }}"></a>
-			</hr>
-		</article>
-	{% endfor %}
-{% endblock %}
+				</div>
+				<div class="stats">
+					<span>{{ post.comments | length }}
+						Comments</span>
+				</div>
+			</footer>
+		</div>
+		<a href="{{ path('app_post_show', {'id': post.id}) }}"></a>
+	</hr>
+</article>{% endfor %}{% endblock %}

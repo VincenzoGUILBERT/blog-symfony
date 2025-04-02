@@ -19,17 +19,42 @@ class PostRepository extends ServiceEntityRepository
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
-    public function findAllWithJoin(): array
+    public function findAllWithJoin($param): array
     {
-        return $this->createQueryBuilder('p')
-            ->addSelect('a', 'c', 'l', 't')
+
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('a', 't', 'c', 'COUNT(l.id) as totalLikes')
             ->innerJoin('p.author', 'a')
             ->leftJoin('p.comments', 'c')
             ->leftJoin('p.likes', 'l')
             ->leftJoin('p.tags', 't')
-            ->orderBy('p.createdAt', 'DESC')
+            ->groupBy('a.id', 't.id', 'p.id', 'c.id');
+
+        if ($param === null || $param === 'newest') {
+            $qb->orderBy('p.createdAt', 'DESC');
+        }
+
+        if ($param === 'populars') {
+            $qb->orderBy('totalLikes', 'DESC');
+        }
+
+        return $qb->getQuery()
+            ->getResult();
+    }
+
+    public function findWithJoin($id): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->addSelect('a', 't', 'c', 'l', 'b')
+            ->innerJoin('p.author', 'a')
+            ->leftJoin('p.comments', 'c')
+            ->leftJoin('c.author', 'b')
+            ->leftJoin('c.likes', 'l')
+            ->leftJoin('p.tags', 't')
+            ->setParameter('id', $id)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
 
