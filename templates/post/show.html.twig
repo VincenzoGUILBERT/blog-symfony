@@ -23,10 +23,7 @@
 			</header>
 			<img src="https://placehold.co/800x600" class="img">
 			<p class="content">{{ post.content }}</p>
-			<div class="tags">
-				<span>tag</span>
-				<span>tag</span>
-			</div>
+			{{ include('post/_post_tags.html.twig') }}
 		</article>
 
 		<hr class="mt-5 mb-5"/>

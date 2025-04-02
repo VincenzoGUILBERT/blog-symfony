@@ -15,10 +15,7 @@
 						<h1>{{post.title | u.truncate(100, '...')}}</h1>
 						{{ include('like/_like_button.html.twig', {type: 'post', entity: post}) }}
 					</div>
-					<div class="tags">
-						<span>tag</span>
-						<span>tag</span>
-					</div>
+					{{ include('post/_post_tags.html.twig') }}
 				</header>
 				<footer class="footer">
 					<div class="author">
@@ -31,7 +28,6 @@
 					</div>
 					<div class="stats">
 						<span>{{ post.comments | length }} Comments</span>
-						<span>{{ post.likes | length }} Likes</span>
 					</div>
 				</footer>
 			</div>

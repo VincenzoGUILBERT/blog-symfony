@@ -23,8 +23,10 @@ class PostType extends AbstractType
                 'label' => 'Tags',
                 'required' => false,
                 'attr' => [
-                    'data-role' => 'tagsinput',
-                    ]
+                    'data-ub-tag-separator' => " ",
+                    'data-ub-tag-max' => 4,
+                    'data-ub-tag-variant' => "primary"
+                ]
             ])
             ->addEventSubscriber(new SetAuthorAndDateSubscriber($this->security))
         ;

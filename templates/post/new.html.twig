@@ -2,6 +2,11 @@
 
 {% block title %}New Post{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bootstrap-tags') }}
+{% endblock %}
+
 {% block main %}
     <h1>Create new Post</h1>
 

@@ -17,7 +17,7 @@ final readonly class TagArrayToStringTransformer implements DataTransformerInter
 
     public function transform($tags): string
     {
-        return implode(',', $tags);
+        return implode(' ', $tags);
     }
 
     public function reverseTransform($string): array
@@ -26,7 +26,7 @@ final readonly class TagArrayToStringTransformer implements DataTransformerInter
             return [];
         }
 
-        $names = array_filter(array_unique($this->trim(u($string)->split(','))));
+        $names = array_filter(array_unique($this->trim(u($string)->split(' '))));
 
         // Get the current tags and find the new ones that should be created.
         $tags = $this->tags->findBy([
