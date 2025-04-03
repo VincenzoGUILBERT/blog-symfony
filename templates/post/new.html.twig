@@ -1,16 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Post{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('bootstrap-tags') }}
+{% block title %}New Post
 {% endblock %}
 
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('bootstrap-tags') }}
+{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('bootstrap-tags') }}
+{% endblock %}
+
+
 {% block main %}
-    <h1>Create new Post</h1>
+	<h1>Create new Post</h1>
 
-    {{ include('post/_form.html.twig') }}
+	{{ include('post/_form.html.twig') }}
 
-    <a href="{{ path('app_post_index') }}">back to list</a>
+	<a href="{{ path('app_post_index') }}">back to list</a>
 {% endblock %}

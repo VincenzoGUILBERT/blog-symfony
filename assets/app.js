@@ -7,7 +7,6 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import "./styles/app.scss";
-import 'use-bootstrap-tag/dist/use-bootstrap-tag.css';
 
 document.querySelectorAll(".like-button").forEach((button) => {
 	button.addEventListener("click", function () {

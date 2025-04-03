@@ -19,7 +19,7 @@ class PostRepository extends ServiceEntityRepository
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
-    public function findAllWithJoin($param): array
+    public function findAllWithJoin($param, $tag): array
     {
 
         $qb = $this->createQueryBuilder('p')
@@ -28,15 +28,22 @@ class PostRepository extends ServiceEntityRepository
             ->leftJoin('p.comments', 'c')
             ->leftJoin('p.likes', 'l')
             ->leftJoin('p.tags', 't')
-            ->groupBy('a.id', 't.id', 'p.id', 'c.id');
+            ->groupBy('a.id', 't.id', 'p.id', 'c.id')
+            ->orderBy('p.createdAt', 'DESC');
 
-        if ($param === null || $param === 'newest') {
-            $qb->orderBy('p.createdAt', 'DESC');
+        switch ($param) {
+            case 'populars':
+                $qb->orderBy('totalLikes', 'DESC');
+                break;
+            default:
+                break;
         }
 
-        if ($param === 'populars') {
-            $qb->orderBy('totalLikes', 'DESC');
+        if ($tag !== null) {
+            $qb->andWhere(':tag MEMBER OF p.tags')
+                ->setParameter('tag', $tag);
         }
+
 
         return $qb->getQuery()
             ->getResult();
