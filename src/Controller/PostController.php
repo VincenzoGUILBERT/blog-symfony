@@ -32,7 +32,6 @@ final class PostController extends AbstractController
         if ($request->query->has('tag')) {
             $tag = $tagRepository->findOneBy(['name' => $request->query->get('tag')]);
         }
-
         return $this->render('post/index.html.twig', [
             'datas' => $postRepository->findAllWithJoin($param, $tag),
         ]);

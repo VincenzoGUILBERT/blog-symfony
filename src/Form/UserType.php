@@ -16,7 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserType extends AbstractType
 {
     public function __construct(
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -24,19 +24,29 @@ class UserType extends AbstractType
         $builder
             ->add('email')
             ->add('username')
-            ->add('password', RepeatedType::class, [
+            ->addEventListener(FormEvents::PRE_SET_DATA, $this->addPasswordFields(...))
+            ->addEventListener(FormEvents::POST_SUBMIT, $this->setPasswordAndDate(...))
+        ;
+    }
+
+    public function addPasswordFields(FormEvent $event): void
+    {
+        $user = $event->getData();
+        $form = $event->getForm();
+
+        if (!$user || $user->getId() === null) {
+            $form->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Your passwords don\'t match.',
                 'constraints' => [new Length(['min' => 3, 'minMessage' => 'Your password must be at least 8 characters long'])],
                 'required' => true,
                 'first_options'  => ['label' => 'Password'],
                 'second_options' => ['label' => 'Confirm Password'],
-            ])
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->setPasswordAndCreatedAt(...))
-        ;
+            ]);
+        }
     }
 
-    public function setPasswordAndCreatedAt(FormEvent $event)
+    public function setPasswordAndDate(FormEvent $event)
     {
         $user = $event->getData();
 

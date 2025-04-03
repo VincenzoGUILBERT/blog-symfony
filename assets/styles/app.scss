@@ -75,6 +75,7 @@ body {
 		margin-right: 0.4em;
 		font-size: 1.2em;
 		text-align: center;
+		width: 24px;
 	}
 	a {
 		margin: 0.3em;
@@ -205,9 +206,6 @@ body {
 	.stats span {
 		margin-left: 1em;
 	}
-	a {
-		text-decoration: none;
-	}
 	a.post-link {
 		position: absolute;
 		top: 0;
@@ -281,7 +279,11 @@ body {
 	gap: 1.5em
 }
 
-.tag-card{
+.tags a{
+	text-decoration: none;
+}
+
+.tag-card, .user-card{
 	height: 180px;
 	display: flex;
 	justify-content: center;
@@ -296,4 +298,22 @@ body {
 	&:hover{
 		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	}
+}
+
+.users-container{
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 180px);
+	gap: 1.5em
+}
+
+.user-card{
+	display: flex;
+	flex-direction: column;
+	
+}
+
+.user-image{
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
 }
