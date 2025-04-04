@@ -14,40 +14,31 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PostController extends AbstractController
 {
-    #[Route('/tag', name: 'app_tag_index', methods: ['GET'])]
-    public function tagsIndex(TagRepository $tagRepository): Response
-    {
-        return $this->render('/post/tag_index.html.twig', [
-            'tags' => $tagRepository->findAll()
-        ]);
-    }
-
-
-    #[Route('/', name: 'app_home')]
+    
     #[Route('/', name: 'app_post_index', methods: ['GET'])]
     public function index(Request $request, PostRepository $postRepository, TagRepository $tagRepository): Response
     {
-        $param = $request->query->get('param');
         $tag = null;
+
         if ($request->query->has('tag')) {
             $tag = $tagRepository->findOneBy(['name' => $request->query->get('tag')]);
         }
         return $this->render('post/index.html.twig', [
-            'datas' => $postRepository->findAllWithJoin($param, $tag),
+            'posts' => $postRepository->findAllWithJoin($tag),
         ]);
     }
-
+    
     #[Route('/post/new', name: 'app_post_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($post);
             $entityManager->flush();
-
+            
             return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -56,7 +47,7 @@ final class PostController extends AbstractController
             'form' => $form,
         ]);
     }
-
+    
     #[Route('/post/{id}', name: 'app_post_show', methods: ['GET'])]
     public function show(PostRepository $postRepository, $id): Response
     {
@@ -64,7 +55,7 @@ final class PostController extends AbstractController
             'post' => $postRepository->findWithJoin($id)
         ]);
     }
-
+    
     #[Route('/post/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
@@ -82,7 +73,7 @@ final class PostController extends AbstractController
             'form' => $form,
         ]);
     }
-
+    
     #[Route('/post/{id}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
@@ -92,5 +83,13 @@ final class PostController extends AbstractController
         }
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/tag', name: 'app_tag_index', methods: ['GET'])]
+    public function tagsIndex(TagRepository $tagRepository): Response
+    {
+        return $this->render('/post/tag_index.html.twig', [
+            'tags' => $tagRepository->findAll()
+        ]);
     }
 }

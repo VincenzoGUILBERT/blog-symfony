@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\CommentRepository;
+use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +25,11 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user, PostRepository $postRepository, CommentRepository $commentRepository): Response
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'posts' => $postRepository->findAllbyUser($user),
         ]);
     }
 

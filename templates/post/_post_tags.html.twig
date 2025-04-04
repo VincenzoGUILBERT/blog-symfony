@@ -5,7 +5,6 @@
 			<a href="{{ path('app_post_index', {'tag': isSameTag ? null : tag.name}) }}" class="badge text-bg-{{ isSameTag ? 'success' : 'secondary' }}">
 			    {{ tag.name }}
 			</a>
-
 		{% endfor %}
 	</div>
 {% endif %}

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,37 +20,27 @@ class PostRepository extends ServiceEntityRepository
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
-    public function findAllWithJoin($param, $tag): array
+    public function findAllWithJoin($tag): array
     {
 
         $qb = $this->createQueryBuilder('p')
-            ->addSelect('a', 't', 'c', 'COUNT(l.id) as totalLikes')
+            ->addSelect('a', 't', 'c', 'l')
             ->innerJoin('p.author', 'a')
             ->leftJoin('p.comments', 'c')
             ->leftJoin('p.likes', 'l')
             ->leftJoin('p.tags', 't')
-            ->groupBy('a.id', 't.id', 'p.id', 'c.id')
             ->orderBy('p.createdAt', 'DESC');
-
-        switch ($param) {
-            case 'populars':
-                $qb->orderBy('totalLikes', 'DESC');
-                break;
-            default:
-                break;
-        }
 
         if ($tag !== null) {
             $qb->andWhere(':tag MEMBER OF p.tags')
                 ->setParameter('tag', $tag);
         }
 
-
         return $qb->getQuery()
             ->getResult();
     }
 
-    public function findWithJoin($id): ?Post
+    public function findWithJoin(int $id): ?Post
     {
         return $this->createQueryBuilder('p')
             ->where('p.id = :id')
@@ -62,6 +53,20 @@ class PostRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+    }
+
+    public function findAllByUser(User $user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.author = :user')
+            ->addSelect('c', 'l', 't')
+            ->leftJoin('p.comments', 'c')
+            ->leftJoin('p.likes', 'l')
+            ->leftJoin('p.tags', 't')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
         ;
     }
 
