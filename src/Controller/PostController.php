@@ -19,12 +19,21 @@ final class PostController extends AbstractController
     public function index(Request $request, PostRepository $postRepository, TagRepository $tagRepository): Response
     {
         $tag = null;
-
         if ($request->query->has('tag')) {
             $tag = $tagRepository->findOneBy(['name' => $request->query->get('tag')]);
         }
         return $this->render('post/index.html.twig', [
             'posts' => $postRepository->findAllWithJoin($tag),
+        ]);
+    }
+
+    #[Route('/feed', name: 'app_post_feed', methods: ['GET'])]
+    public function feed(PostRepository $postRepository): Response
+    {
+        $user = $this->getUser();
+
+        return $this->render('/post/index.html.twig', [
+            'posts' => $postRepository->findPostsFromFollowedUsers($user)
         ]);
     }
     

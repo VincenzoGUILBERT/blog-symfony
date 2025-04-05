@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +21,7 @@ class PostRepository extends ServiceEntityRepository
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
-    public function findAllWithJoin($tag): array
+    public function findAllWithJoin(?Tag $tag): array
     {
 
         $qb = $this->createQueryBuilder('p')
@@ -37,6 +38,22 @@ class PostRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()
+            ->getResult();
+    }
+
+    public function findPostsFromFollowedUsers(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->addSelect('u', 'c', 'l', 't')
+            ->innerJoin('p.author', 'u')
+            ->innerJoin('u.followers', 'f')
+            ->leftJoin('p.comments', 'c')
+            ->leftJoin('p.likes', 'l')
+            ->leftJoin('p.tags', 't')
+            ->where('f.follower = :currentUser')
+            ->setParameter('currentUser', $user)
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
             ->getResult();
     }
 
