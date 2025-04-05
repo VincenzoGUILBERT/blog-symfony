@@ -70,19 +70,13 @@
 									<li><a class="link-menu" href="{{ path('app_tag_index') }}"><i class="fa-fw fa-solid fa-hashtag"></i><div class="text-menu"><span>Tags</span><span>Explore all tags</span></div></a></li>
 								</ul>
 							</div>
-							<div>
-								<span class="popular-tags">Popular Tags</span>
-								<ul>
-									<li><a href=""><span>#javascript</span></a></li>
-									<li><a href=""><span>#symfony</span></a></li>
-									<li><a href=""><span>#react</span></a></li>
-								</ul>
-							</div>
 						</nav>
 					{% endblock %}
 				</div>
 				<div id="main-container">
-					{% block main %}{% endblock %}
+					<div class="container">
+						{% block main %}{% endblock %}
+					</div>
 				</div>
 			{% endblock %}
 		</div>
